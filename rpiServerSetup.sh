@@ -3,6 +3,11 @@
 sudo apt update
 sudo apt upgrade
 
+echo "Installing Uncomplicated Firewall (ufw)..."
+
+sudo apt install ufw
+
+sudo apt install -y ca-certificates curl gnupg
 
 
 # Install SMB Server
@@ -15,11 +20,14 @@ echo "Setting up SMB Share..."
 # timeout(1)
 read -p "Enter the name of the SMB share (default: smbshare): " smbShareName
 smbShareName="${smbShareName:-smbshare}"
+
+sudo mkdir -p /mnt/ssd
+sudo mount /dev/sda1 /mnt/ssd
 ssdMnt=$(findmnt -rn -S /dev/sda1 -o TARGET)
 
 echo "
 [${smbShareName}]
-path = ${ssdMnt}
+path = ${ssdMnt}/tera
 writeable = yes
 browseable = yes
 public = no
@@ -67,6 +75,18 @@ docker volume create portainer_data
 docker run -d -p 8000:8000 -p 9443:9443 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
 
 echo "Portainer installed. Access here: https://$(hostname).local:9443"
+
+
+# NodeJS Install
+
+echo "Installing Node, npm, yarn..."
+
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/nodesource.gpg
+NODE_MAJOR=22
+echo "deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+sudo apt update
+sudo apt install -y nodejs 
+sudo apt install build-essential
 
 
 
