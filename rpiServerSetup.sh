@@ -9,6 +9,42 @@ sudo apt install ufw
 
 sudo apt install -y ca-certificates curl gnupg
 
+# Install and configure Oh My ZSH
+
+echo "Installing zsh..."
+
+sudo apt-get update && sudo apt-get upgrade
+
+sudo apt-get install zsh
+
+echo "Changing shell to zsh..."
+
+sudo chsh -s $(which zsh) $USER
+
+echo "Installing oh-my-zsh..."
+
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+echo "Installing zsh-syntax-highlighting..."
+
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+
+git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-completions
+
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# plugins=(git zsh-completions zsh-autosuggestions zsh-syntax-highlighting)
+# autoload -U compinit && compinit
+
+sudo apt-get install fonts-powerline
+
+
+# ZSH_THEME="agnoster"
+
+. ~/.zshrc
+
 
 # Install SMB Server
 
